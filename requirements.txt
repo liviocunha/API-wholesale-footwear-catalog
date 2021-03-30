@@ -1,6 +1,6 @@
 asgiref==3.3.1
 Django==3.1.5
-django-ninja==0.10.1
+django-ninja==0.12.1
 pkg-resources==0.0.0
 pydantic==1.7.3
 python-decouple==3.4
