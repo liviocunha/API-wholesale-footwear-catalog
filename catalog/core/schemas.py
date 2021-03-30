@@ -16,6 +16,7 @@ class CategoryIn(Schema):
 
 
 class CategoryOut(Schema):
-    id: int
-    client: ClientIn
-    title: str
+    detail: str = 'Success'
+    id: int = None
+    title: str = None
+    client: ClientIn = None
