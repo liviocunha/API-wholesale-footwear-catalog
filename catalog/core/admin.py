@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Category, Collection, Size, Status, Footwear, Photo
+from .models import Category, Collection, Size, Status, Footwear, Photo, Client
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('title', 'client')
     search_fields = ('title',)
 
 
@@ -32,9 +32,15 @@ class PhotoAdmin(admin.ModelAdmin):
     search_fields = ('code_footwear',)
 
 
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('client', 'key')
+    search_fields = ('client',)
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Size, SizeAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Footwear, FootwearAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Client, ClientAdmin)
