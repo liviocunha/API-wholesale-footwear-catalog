@@ -6,3 +6,11 @@ def generate_api_key():
     size = 50
     api_key = "".join(random.sample(chars, size))
     return api_key
+
+
+def str_upper(string):
+    return string.upper()
+
+
+def str_title(string):
+    return string.title()
