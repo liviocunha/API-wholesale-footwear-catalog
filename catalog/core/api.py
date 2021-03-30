@@ -4,7 +4,7 @@ from ninja import Router
 from ninja.security import django_auth, APIKeyQuery
 from .models import Client, Category
 from .schemas import ClientIn, ClientOut, CategoryIn
-from .utils import generate_api_key
+from .utils import generate_api_key, str_upper, str_title
 
 
 class ApiKey(APIKeyQuery):
@@ -39,3 +39,17 @@ def create_client(request, payload: ClientIn):
 def list_client(request):
     qs = Client.objects.all()
     return qs
+
+
+@router.post("/category", auth=api_key, tags=["Category"])
+def create_category(request, payload: CategoryIn):
+    data = payload.dict()
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        categories = Category.objects.filter(client=client)
+        get_category = categories.get(title=str_upper(data['title']))
+        return {"detail": f"The {str_title(data['title'])} category already exists, please insert a new one."}
+    except Category.DoesNotExist:
+
+        category = Category.objects.create(client=client, title=str_upper(data['title']))
+        return {"id": category.id, "title": category.title.title()}
