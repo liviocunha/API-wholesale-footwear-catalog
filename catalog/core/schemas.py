@@ -1,18 +1,21 @@
 from ninja import Schema
 
 
-class ClientSchema(Schema):
+class ClientOut(Schema):
     id: int
     client: str
     key: str
 
 
+class ClientIn(Schema):
+    client: str
+
+
 class CategoryIn(Schema):
-    client: int
     title: str
 
 
 class CategoryOut(Schema):
     id: int
-    client: ClientSchema
+    client: ClientIn
     title: str
