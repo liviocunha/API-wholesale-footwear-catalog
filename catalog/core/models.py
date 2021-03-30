@@ -6,6 +6,9 @@ class Client(models.Model):
     key = models.CharField(max_length=20, unique=True, help_text='API Key of client.'
                            , verbose_name='API KEY')
 
+    def __str__(self):
+        return self.client
+
 
 class Category(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
