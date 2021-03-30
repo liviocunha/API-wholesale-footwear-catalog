@@ -1,7 +1,14 @@
 from django.db import models
 
 
+class Client(models.Model):
+    client = models.CharField(max_length=100, help_text='Authorized API client', verbose_name='Authorized')
+    key = models.CharField(max_length=20, unique=True, help_text='API Key of client.'
+                           , verbose_name='API KEY')
+
+
 class Category(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Category of footwear.", verbose_name="Category")
 
     def __str__(self):
@@ -9,6 +16,7 @@ class Category(models.Model):
 
 
 class Collection(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Collection.", verbose_name="Collection")
 
     def __str__(self):
@@ -16,6 +24,7 @@ class Collection(models.Model):
 
 
 class Status(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Status of sale.", verbose_name="Status")
 
     def __str__(self):
@@ -23,6 +32,7 @@ class Status(models.Model):
 
 
 class Size(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Size grid.", verbose_name="Size")
 
     def __str__(self):
@@ -30,6 +40,7 @@ class Size(models.Model):
 
 
 class Footwear(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     code = models.CharField(max_length=100, help_text="Code of footwear.", verbose_name="Code")
     upper = models.CharField(max_length=100, help_text="Upper/Leather material of footwear.", verbose_name="Upper")
     name = models.CharField(max_length=100, help_text="Title of footwear", verbose_name="Title")
@@ -49,6 +60,7 @@ class Footwear(models.Model):
 
 
 class Photo(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     code_footwear = models.ForeignKey(Footwear, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Title of photo.", verbose_name="Title")
     url = models.URLField(max_length=200, help_text="URL of photo.", verbose_name="URL")
