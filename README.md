@@ -2,7 +2,7 @@
 
 * Python 3.8.5
 * Django 3.1.5
-* Django Ninja 0.10.1
+* Django Ninja 0.12.1
 * Python Decouple 3.4
 
 ## How to run project?
