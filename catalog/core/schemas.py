@@ -20,3 +20,14 @@ class CategoryOut(Schema):
     id: int = None
     title: str = None
     client: ClientIn = None
+
+
+class CollectionIn(Schema):
+    title: str
+
+
+class CollectionOut(Schema):
+    detail: str = 'Success'
+    id: int = None
+    title: str = None
+    client: ClientIn = None
