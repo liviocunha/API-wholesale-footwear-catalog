@@ -67,3 +67,11 @@ def get_category(request, title: str):
         return category_one
     except Category.DoesNotExist:
         return {'id': None, 'client': None, 'title': None, 'detail': 'No categories for this client'}
+
+
+@router.get("/category", response=List[CategoryOut], auth=api_key, tags=["category"])
+def list_category(request):
+    client = Client.objects.get(key=request.auth.key)
+    categories = Category.objects.filter(client=client)
+    return categories
+
