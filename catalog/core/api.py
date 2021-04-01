@@ -67,7 +67,7 @@ def get_category(request, id: int):
         category_one = categories.get(id=id)
         return category_one
     except Category.DoesNotExist:
-        return {'id': None, 'client': None, 'title': None, 'detail': 'No category for this Client'}
+        return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
 
 
 @router.get("/category/search/{title}", response=List[CategoryOut], auth=api_key, tags=["category"])
@@ -79,9 +79,9 @@ def search_category(request, title: str):
         if len(categories_search) > 0:
             return categories_search
         else:
-            return [{'id': None, 'client': None, 'title': None, 'detail': 'No category for this search'}]
+            return [{"id": None, "client": None, "title": None, "detail": "No category for this search"}]
     except Category.DoesNotExist:
-        return {'id': None, 'client': None, 'title': None, 'detail': 'No category for this Client'}
+        return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
 
 
 @router.get("/category", response=List[CategoryOut], auth=api_key, tags=["category"])
@@ -91,7 +91,7 @@ def list_category(request):
     if len(categories) > 0:
         return categories
     else:
-        return [{'detail': 'Categories empty'}]
+        return [{"detail": "Categories empty"}]
 
 
 # Collection
@@ -119,7 +119,7 @@ def get_collection(request, id: int):
         collection_one = collections.get(id=id)
         return collection_one
     except Collection.DoesNotExist:
-        return {'id': None, 'client': None, 'title': None, 'detail': 'No collection for this Client'}
+        return {"id": None, "client": None, "title": None, "detail": "No collection for this Client"}
 
 
 @router.get("/collection/search/{title}", response=List[CollectionOut], auth=api_key, tags=["collection"])
@@ -131,9 +131,9 @@ def search_collection(request, title: str):
         if len(collections_search) > 0:
             return collections_search
         else:
-            return [{'id': None, 'client': None, 'title': None, 'detail': 'No collection for this search'}]
+            return [{"id": None, "client": None, "title": None, "detail": "No collection for this search"}]
     except Collection.DoesNotExist:
-        return {'id': None, 'client': None, 'title': None, 'detail': 'No collection for this Client'}
+        return {"id": None, "client": None, "title": None, "detail": "No collection for this Client"}
 
 
 @router.get("/collection", response=List[CollectionOut], auth=api_key, tags=["collection"])
@@ -143,5 +143,4 @@ def list_collection(request):
     if len(collections) > 0:
         return collections
     else:
-        return [{'detail': 'Collections empty'}]
-
+        return [{"detail": "Collections empty"}]
