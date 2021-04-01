@@ -31,3 +31,14 @@ class CollectionOut(Schema):
     id: int = None
     title: str = None
     client: ClientIn = None
+
+
+class SizeIn(Schema):
+    title: str
+
+
+class SizeOut(Schema):
+    detail: str = 'Success'
+    id: int = None
+    title: str = None
+    client: ClientIn = None

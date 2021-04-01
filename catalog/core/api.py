@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from typing import List
 from ninja import Router
 from ninja.security import django_auth, APIKeyQuery
-from .models import Client, Category, Collection
-from .schemas import ClientIn, ClientOut, CategoryIn, CategoryOut, CollectionIn, CollectionOut
+from .models import Client, Category, Collection, Size
+from .schemas import ClientIn, ClientOut, CategoryIn, CategoryOut, CollectionIn, CollectionOut, SizeIn, SizeOut
 from .utils import generate_api_key, modified_dict_values_title
 
 
@@ -160,3 +160,62 @@ def delete_collection(request, id: int):
     title = collection.title
     collection.delete()
     return {"detail": f"Deleted collection {title} with success"}
+
+
+# Size
+@router.post("/size", auth=api_key, tags=["size"])
+def create_size(request, payload: SizeIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        sizes = Size.objects.filter(client=client)
+        get_size = sizes.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} size already exists, please insert a new one."}
+    except Size.DoesNotExist:
+        size = Size.objects.create(client=client, title=data['title'])
+
+        return {"id": size.id, "title": size.title}
+
+
+@router.get("/size/{id}", response=SizeOut, auth=api_key, tags=["size"])
+def get_size(request, id: int):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        sizes = Size.objects.filter(client=client)
+        size_one = sizes.get(id=id)
+        return size_one
+    except Size.DoesNotExist:
+        return {"id": None, "client": None, "title": None, "detail": "No size for this Client"}
+
+
+@router.get("/size/search/{title}", response=List[SizeOut], auth=api_key, tags=["size"])
+def search_size(request, title: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        sizes = Size.objects.filter(client=client)
+        sizes_search = sizes.filter(title__icontains=title)
+        if len(sizes_search) > 0:
+            return sizes_search
+        else:
+            return [{"id": None, "client": None, "title": None, "detail": "No size for this search"}]
+    except Size.DoesNotExist:
+        return {"id": None, "client": None, "title": None, "detail": "No size for this Client"}
+
+
+@router.get("/size", response=List[SizeOut], auth=api_key, tags=["size"])
+def list_size(request):
+    client = Client.objects.get(key=request.auth.key)
+    sizes = Size.objects.filter(client=client)
+    if len(sizes) > 0:
+        return sizes
+    else:
+        return [{"detail": "Sizes empty"}]
+
+
+@router.delete("/size/{id}", auth=api_key, tags=["size"])
+def delete_size(request, id: int):
+    size = get_object_or_404(Size, id=id)
+    title = size.title
+    size.delete()
+    return {"detail": f"Deleted size {title} with success"}
