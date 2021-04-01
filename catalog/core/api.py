@@ -59,22 +59,39 @@ def create_category(request, payload: CategoryIn):
         return {"id": category.id, "title": category.title}
 
 
-@router.get("/category/{title}", response=CategoryOut, auth=api_key, tags=["category"])
-def get_category(request, title: str):
+@router.get("/category/{id}", response=CategoryOut, auth=api_key, tags=["category"])
+def get_category(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
         categories = Category.objects.filter(client=client)
-        category_one = categories.get(title__icontains=title)
+        category_one = categories.get(id=id)
         return category_one
     except Category.DoesNotExist:
-        return {'id': None, 'client': None, 'title': None, 'detail': 'No categories for this Client'}
+        return {'id': None, 'client': None, 'title': None, 'detail': 'No category for this Client'}
+
+
+@router.get("/category/search/{title}", response=List[CategoryOut], auth=api_key, tags=["category"])
+def search_category(request, title: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        categories = Category.objects.filter(client=client)
+        categories_search = categories.filter(title__icontains=title)
+        if len(categories_search) > 0:
+            return categories_search
+        else:
+            return [{'id': None, 'client': None, 'title': None, 'detail': 'No category for this search'}]
+    except Category.DoesNotExist:
+        return {'id': None, 'client': None, 'title': None, 'detail': 'No category for this Client'}
 
 
 @router.get("/category", response=List[CategoryOut], auth=api_key, tags=["category"])
 def list_category(request):
     client = Client.objects.get(key=request.auth.key)
     categories = Category.objects.filter(client=client)
-    return categories
+    if len(categories) > 0:
+        return categories
+    else:
+        return [{'detail': 'Categories empty'}]
 
 
 # Collection
@@ -94,13 +111,27 @@ def create_collection(request, payload: CollectionIn):
         return {"id": collection.id, "title": collection.title}
 
 
-@router.get("/collection/{title}", response=CollectionOut, auth=api_key, tags=["collection"])
-def get_collection(request, title: str):
+@router.get("/collection/{id}", response=CollectionOut, auth=api_key, tags=["collection"])
+def get_collection(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
         collections = Collection.objects.filter(client=client)
-        collection_one = collections.get(title__icontains=title)
+        collection_one = collections.get(id=id)
         return collection_one
+    except Collection.DoesNotExist:
+        return {'id': None, 'client': None, 'title': None, 'detail': 'No collection for this Client'}
+
+
+@router.get("/collection/search/{title}", response=List[CollectionOut], auth=api_key, tags=["collection"])
+def search_collection(request, title: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        collections = Collection.objects.filter(client=client)
+        collections_search = collections.filter(title__icontains=title)
+        if len(collections_search) > 0:
+            return collections_search
+        else:
+            return [{'id': None, 'client': None, 'title': None, 'detail': 'No collection for this search'}]
     except Collection.DoesNotExist:
         return {'id': None, 'client': None, 'title': None, 'detail': 'No collection for this Client'}
 
@@ -109,5 +140,8 @@ def get_collection(request, title: str):
 def list_collection(request):
     client = Client.objects.get(key=request.auth.key)
     collections = Collection.objects.filter(client=client)
-    return collections
+    if len(collections) > 0:
+        return collections
+    else:
+        return [{'detail': 'Collections empty'}]
 
