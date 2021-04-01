@@ -94,6 +94,14 @@ def list_category(request):
         return [{"detail": "Categories empty"}]
 
 
+@router.delete("/category/{id}", auth=api_key, tags=["category"])
+def delete_category(request, id: int):
+    category = get_object_or_404(Category, id=id)
+    title = category.title
+    category.delete()
+    return {"detail": f"Deleted category {title} with success"}
+
+
 # Collection
 @router.post("/collection", auth=api_key, tags=["collection"])
 def create_collection(request, payload: CollectionIn):
@@ -144,3 +152,11 @@ def list_collection(request):
         return collections
     else:
         return [{"detail": "Collections empty"}]
+
+
+@router.delete("/collection/{id}", auth=api_key, tags=["collection"])
+def delete_collection(request, id: int):
+    collection = get_object_or_404(Collection, id=id)
+    title = collection.title
+    collection.delete()
+    return {"detail": f"Deleted collection {title} with success"}
