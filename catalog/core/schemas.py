@@ -42,3 +42,14 @@ class SizeOut(Schema):
     id: int = None
     title: str = None
     client: ClientIn = None
+
+
+class StatusIn(Schema):
+    title: str
+
+
+class StatusOut(Schema):
+    detail: str = 'Success'
+    id: int = None
+    title: str = None
+    client: ClientIn = None

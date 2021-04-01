@@ -2,8 +2,15 @@ from django.shortcuts import get_object_or_404
 from typing import List
 from ninja import Router
 from ninja.security import django_auth, APIKeyQuery
-from .models import Client, Category, Collection, Size
-from .schemas import ClientIn, ClientOut, CategoryIn, CategoryOut, CollectionIn, CollectionOut, SizeIn, SizeOut
+from .models import Client, Category, Collection, Size, Status
+from .schemas import (
+    ClientIn, ClientOut,
+    CategoryIn, CategoryOut,
+    CollectionIn, CollectionOut,
+    SizeIn, SizeOut,
+    StatusIn, StatusOut,
+)
+
 from .utils import generate_api_key, modified_dict_values_title
 
 
@@ -219,3 +226,62 @@ def delete_size(request, id: int):
     title = size.title
     size.delete()
     return {"detail": f"Deleted size {title} with success"}
+
+
+# Status
+@router.post("/status", auth=api_key, tags=["status"])
+def create_status(request, payload: SizeIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        statuses = Status.objects.filter(client=client)
+        get_status = statuses.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} size already status, please insert a new one."}
+    except Status.DoesNotExist:
+        status = Status.objects.create(client=client, title=data['title'])
+
+        return {"id": status.id, "title": status.title}
+
+
+@router.get("/status/{id}", response=StatusOut, auth=api_key, tags=["status"])
+def get_status(request, id: int):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        statuses = Status.objects.filter(client=client)
+        status_one = statuses.get(id=id)
+        return status_one
+    except Status.DoesNotExist:
+        return {"id": None, "client": None, "title": None, "detail": "No status for this Client"}
+
+
+@router.get("/status/search/{title}", response=List[StatusOut], auth=api_key, tags=["status"])
+def search_status(request, title: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        statuses = Status.objects.filter(client=client)
+        statuses_search = statuses.filter(title__icontains=title)
+        if len(statuses_search) > 0:
+            return statuses_search
+        else:
+            return [{"id": None, "client": None, "title": None, "detail": "No status for this search"}]
+    except Status.DoesNotExist:
+        return {"id": None, "client": None, "title": None, "detail": "No status for this Client"}
+
+
+@router.get("/status", response=List[StatusOut], auth=api_key, tags=["status"])
+def list_status(request):
+    client = Client.objects.get(key=request.auth.key)
+    statuses = Status.objects.filter(client=client)
+    if len(statuses) > 0:
+        return statuses
+    else:
+        return [{"detail": "statuses empty"}]
+
+
+@router.delete("/status/{id}", auth=api_key, tags=["status"])
+def delete_status(request, id: int):
+    status = get_object_or_404(Status, id=id)
+    title = status.title
+    status.delete()
+    return {"detail": f"Deleted status {title} with success"}
