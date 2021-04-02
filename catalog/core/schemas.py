@@ -53,3 +53,14 @@ class StatusOut(Schema):
     id: int = None
     title: str = None
     client: ClientIn = None
+
+
+class ColorIn(Schema):
+    name: str
+
+
+class ColorOut(Schema):
+    detail: str = 'Success'
+    id: int = None
+    name: str = None
+    client: ClientIn = None

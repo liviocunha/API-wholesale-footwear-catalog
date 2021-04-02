@@ -42,6 +42,14 @@ class Size(models.Model):
         return self.title
 
 
+class Color(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
+    name = models.CharField(max_length=100, help_text="Color.", verbose_name="Color")
+
+    def __str__(self):
+        return self.name
+
+
 class Footwear(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     code = models.CharField(max_length=100, help_text="Code of footwear.", verbose_name="Code")
@@ -57,6 +65,7 @@ class Footwear(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, blank=True, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, blank=True, null=True)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.code

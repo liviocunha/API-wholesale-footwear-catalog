@@ -2,13 +2,14 @@ from django.shortcuts import get_object_or_404
 from typing import List
 from ninja import Router
 from ninja.security import django_auth, APIKeyQuery
-from .models import Client, Category, Collection, Size, Status
+from .models import Client, Category, Collection, Size, Status, Color
 from .schemas import (
     ClientIn, ClientOut,
     CategoryIn, CategoryOut,
     CollectionIn, CollectionOut,
     SizeIn, SizeOut,
     StatusIn, StatusOut,
+    ColorIn, ColorOut,
 )
 
 from .utils import generate_api_key, modified_dict_values_title
@@ -349,3 +350,81 @@ def delete_status(request, id: int):
     title = status.title
     status.delete()
     return {"detail": f"Deleted status {title} with success"}
+
+
+# Color
+@router.post("/color/create", auth=api_key, tags=["color"])
+def create_color(request, payload: ColorIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        colors = Color.objects.filter(client=client)
+        get_color = colors.get(name__icontains=data['name'])
+        return {"detail": f"The {data['name']} color already status, please insert a new one."}
+    except Color.DoesNotExist:
+        color = Color.objects.create(client=client, name=data['name'])
+
+        return {"id": color.id, "title": color.name}
+
+
+@router.put("/color/update/{id}", auth=api_key, tags=["color"])
+def update_color(request, id: int, payload: ColorIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    try:
+        get_color = Color.objects.get(name__icontains=data['name'])
+        return {"detail": f"The {data['name']} color already exists, please insert a new one."}
+    except Color.DoesNotExist:
+        color = get_object_or_404(Status, id=id)
+        for attr, value in payload.dict().items():
+            setattr(color, attr, value.title())
+        color.save()
+        new_name = color.title
+        return {"new_name": new_name}
+
+
+@router.get("/color/get/{id}", response=ColorOut, auth=api_key, tags=["color"])
+def get_color(request, id: int):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        colors = Color.objects.filter(client=client)
+        color_one = colors.get(id=id)
+        return color_one
+    except Color.DoesNotExist:
+        return {"id": None, "client": None, "name": None, "detail": "No color for this Client"}
+
+
+@router.get("/color/search/{name}", response=List[ColorOut], auth=api_key, tags=["color"])
+def search_color(request, name: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        colors = Color.objects.filter(client=client)
+        colors_search = colors.filter(name__icontains=name)
+        if len(colors_search) > 0:
+            return colors_search
+        else:
+            return [{"id": None, "client": None, "name": None, "detail": "No color for this search"}]
+    except Color.DoesNotExist:
+        return {"id": None, "client": None, "name": None, "detail": "No color for this Client"}
+
+
+@router.get("/color/list", response=List[ColorOut], auth=api_key, tags=["color"])
+def list_color(request):
+    client = Client.objects.get(key=request.auth.key)
+    colors = Color.objects.filter(client=client)
+    if len(colors) > 0:
+        return colors
+    else:
+        return [{"detail": "colors empty"}]
+
+
+@router.delete("/color/delete/{id}", auth=api_key, tags=["color"])
+def delete_color(request, id: int):
+    color = get_object_or_404(Color, id=id)
+    name = color.name
+    color.delete()
+    return {"detail": f"Deleted color {name} with success"}
+
+
+
