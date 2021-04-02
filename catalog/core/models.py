@@ -73,3 +73,12 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.url
+
+
+class StoragePhoto(models.Model):
+    name = models.CharField(max_length=100, help_text="Name storage.", verbose_name="Storage")
+    url = models.URLField(max_length=200, help_text="URL API.", verbose_name="URL")
+    api_key = models.CharField(max_length=20, unique=True, help_text='API Key of storage.', verbose_name='API KEY')
+
+    def __str__(self):
+        return self.name
