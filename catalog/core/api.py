@@ -1,8 +1,9 @@
+import json
 from django.shortcuts import get_object_or_404
 from typing import List
 from ninja import Router
 from ninja.security import django_auth, APIKeyQuery
-from .models import Client, Category, Collection, Size, Status, Color
+from .models import Client, Category, Collection, Size, Status, Color, Footwear
 from .schemas import (
     ClientIn, ClientOut,
     CategoryIn, CategoryOut,
@@ -10,6 +11,7 @@ from .schemas import (
     SizeIn, SizeOut,
     StatusIn, StatusOut,
     ColorIn, ColorOut,
+    FootwearIn, FootwearOut,
 )
 
 from .utils import generate_api_key, modified_dict_values_title
@@ -376,7 +378,7 @@ def update_color(request, id: int, payload: ColorIn):
         get_color = Color.objects.get(name__icontains=data['name'])
         return {"detail": f"The {data['name']} color already exists, please insert a new one."}
     except Color.DoesNotExist:
-        color = get_object_or_404(Status, id=id)
+        color = get_object_or_404(Color, id=id)
         for attr, value in payload.dict().items():
             setattr(color, attr, value.title())
         color.save()
@@ -427,4 +429,112 @@ def delete_color(request, id: int):
     return {"detail": f"Deleted color {name} with success"}
 
 
+# Footwear
+@router.post("/footwear/create", auth=api_key, tags=["footwear"])
+def create_footwear(request, payload: FootwearIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        footwears = Footwear.objects.filter(client=client)
+        get_footwear = footwears.get(code__icontains=data['code'])
+        return {"detail": f"The {data['code']} footwear already status, please insert a new one."}
+    except Footwear.DoesNotExist:
+        category = Category.objects.get(id=data['category'])
+        collection = Collection.objects.get(id=data['collection'])
+        size = Size.objects.get(id=data['size'])
+        status = Status.objects.get(id=data['status'])
+        color = Color.objects.get(id=data['color'])
+        code = data['code'].upper()
+        del data['category'], data['collection'], data['size'], data['status'], data['color'], data['code']
 
+        footwear = Footwear.objects.create(client=client, category=category,
+                                           collection=collection, size=size,
+                                           status=status, color=color,
+                                           code=code, **data)
+
+        return {"id": footwear.id, "code": footwear.code, "name": footwear.name}
+
+
+@router.put("/footwear/update/{id}", auth=api_key, tags=["footwear"])
+def update_footwear(request, id: int, payload: FootwearIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    footwear = get_object_or_404(Footwear, id=id)
+
+    category = Category.objects.get(id=data['category'])
+    collection = Collection.objects.get(id=data['collection'])
+    size = Size.objects.get(id=data['size'])
+    status = Status.objects.get(id=data['status'])
+    color = Color.objects.get(id=data['color'])
+    code = data['code'].upper()
+    del data['category'], data['collection'], data['size'], data['status'], data['color'], data['code']
+
+    data.update({'category': category})
+    data.update({'collection': collection})
+    data.update({'size': size})
+    data.update({'status': status})
+    data.update({'color': color})
+    data.update({'code': code})
+
+    for attr, value in data.items():
+        setattr(footwear, attr, value)
+
+    footwear.save()
+
+    return {"detail": f"OK, footwear code {code} update!"}
+
+
+@router.get("/footwear/get/{id}", response=FootwearOut, auth=api_key, tags=["footwear"])
+def get_footwear(request, id: int):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        footwears = Footwear.objects.filter(client=client)
+        footwear_one = footwears.get(id=id)
+        return footwear_one
+    except Footwear.DoesNotExist:
+        return {"id": None, "client": None, "code": None, "upper": None, "name": None,
+                "outsole": None, "lining": None, "shoelaces": None, "insole": None,
+                "abc_curve": None, "cost_price": None, "category": None, "collection": None,
+                "size": None, "status": None, "color": None,
+                "detail": "No footwear for this Client"}
+
+
+@router.get("/footwear/search/{name}", response=List[FootwearOut], auth=api_key, tags=["footwear"])
+def search_footwear(request, name: str):
+    try:
+        client = Client.objects.get(key=request.auth.key)
+        footwears = Footwear.objects.filter(client=client)
+        footwear_search = footwears.filter(name__icontains=name)
+        if len(footwear_search) > 0:
+            return footwear_search
+        else:
+            return [{"id": None, "client": None, "code": None, "upper": None, "name": None,
+                     "outsole": None, "lining": None, "shoelaces": None, "insole": None,
+                     "abc_curve": None, "cost_price": None, "category": None, "collection": None,
+                     "size": None, "status": None, "color": None,
+                     "detail": "No footwear for this search"}]
+    except Footwear.DoesNotExist:
+        return {"id": None, "client": None, "code": None, "upper": None, "name": None,
+                "outsole": None, "lining": None, "shoelaces": None, "insole": None,
+                "abc_curve": None, "cost_price": None, "category": None, "collection": None,
+                "size": None, "status": None, "color": None,
+                "detail": "No footwear for this Client"}
+
+
+@router.get("/footwear/list", response=List[FootwearOut], auth=api_key, tags=["footwear"])
+def list_footwear(request):
+    client = Client.objects.get(key=request.auth.key)
+    footwears = Footwear.objects.filter(client=client)
+    if len(footwears) > 0:
+        return footwears
+    else:
+        return [{"detail": "footwears empty"}]
+
+
+@router.delete("/footwear/delete/{id}", auth=api_key, tags=["footwear"])
+def delete_footwear(request, id: int):
+    footwear = get_object_or_404(Footwear, id=id)
+    code = footwear.code
+    footwear.delete()
+    return {"detail": f"Deleted footwear {code} with success"}

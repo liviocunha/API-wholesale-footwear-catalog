@@ -64,3 +64,39 @@ class ColorOut(Schema):
     id: int = None
     name: str = None
     client: ClientIn = None
+
+
+class FootwearIn(Schema):
+    code: str
+    upper: str
+    name: str
+    outsole: str
+    lining: str
+    shoelaces: str
+    insole: str
+    abc_curve: str
+    cost_price: float
+    category: int
+    collection: int
+    size: int
+    status: int
+    color: int
+
+
+class FootwearOut(Schema):
+    id: int
+    client: ClientIn = None
+    code: str
+    upper: str
+    name: str
+    outsole: str
+    lining: str
+    shoelaces: str
+    insole: str
+    abc_curve: str
+    cost_price: float
+    category: CategoryIn = None
+    collection: CollectionIn = None
+    size: SizeIn = None
+    status: StatusIn = None
+    color: ColorIn = None
