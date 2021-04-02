@@ -66,6 +66,22 @@ def create_category(request, payload: CategoryIn):
         return {"id": category.id, "title": category.title}
 
 
+@router.put("/category/{id}", auth=api_key, tags=["category"])
+def update_category(request, id: int, payload: CategoryIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    try:
+        get_category = Category.objects.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} category already exists, please insert a new one."}
+    except Category.DoesNotExist:
+        category = get_object_or_404(Category, id=id)
+        for attr, value in payload.dict().items():
+            setattr(category, attr, value.title())
+        category.save()
+        new_title = category.title
+        return {"new_title": new_title}
+
+
 @router.get("/category/{id}", response=CategoryOut, auth=api_key, tags=["category"])
 def get_category(request, id: int):
     try:
@@ -124,6 +140,22 @@ def create_collection(request, payload: CollectionIn):
         collection = Collection.objects.create(client=client, title=data['title'])
 
         return {"id": collection.id, "title": collection.title}
+
+
+@router.put("/collection/{id}", auth=api_key, tags=["collection"])
+def update_collection(request, id: int, payload: CollectionIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    try:
+        get_collection = Collection.objects.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} collection already exists, please insert a new one."}
+    except Collection.DoesNotExist:
+        collection = get_object_or_404(Collection, id=id)
+        for attr, value in payload.dict().items():
+            setattr(collection, attr, value.title())
+        collection.save()
+        new_title = collection.title
+        return {"new_title": new_title}
 
 
 @router.get("/collection/{id}", response=CollectionOut, auth=api_key, tags=["collection"])
@@ -185,6 +217,22 @@ def create_size(request, payload: SizeIn):
         return {"id": size.id, "title": size.title}
 
 
+@router.put("/size/{id}", auth=api_key, tags=["size"])
+def update_size(request, id: int, payload: SizeIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    try:
+        get_size = Size.objects.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} size already exists, please insert a new one."}
+    except Size.DoesNotExist:
+        size = get_object_or_404(Size, id=id)
+        for attr, value in payload.dict().items():
+            setattr(size, attr, value.title())
+        size.save()
+        new_title = size.title
+        return {"new_title": new_title}
+
+
 @router.get("/size/{id}", response=SizeOut, auth=api_key, tags=["size"])
 def get_size(request, id: int):
     try:
@@ -230,7 +278,7 @@ def delete_size(request, id: int):
 
 # Status
 @router.post("/status", auth=api_key, tags=["status"])
-def create_status(request, payload: SizeIn):
+def create_status(request, payload: StatusIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
     client = Client.objects.get(key=request.auth.key)
@@ -242,6 +290,22 @@ def create_status(request, payload: SizeIn):
         status = Status.objects.create(client=client, title=data['title'])
 
         return {"id": status.id, "title": status.title}
+
+
+@router.put("/status/{id}", auth=api_key, tags=["status"])
+def update_size(request, id: int, payload: StatusIn):
+    data = payload.dict()
+    data = modified_dict_values_title(data)
+    try:
+        get_status = Status.objects.get(title__icontains=data['title'])
+        return {"detail": f"The {data['title']} status already exists, please insert a new one."}
+    except Status.DoesNotExist:
+        status = get_object_or_404(Status, id=id)
+        for attr, value in payload.dict().items():
+            setattr(status, attr, value.title())
+        status.save()
+        new_title = status.title
+        return {"new_title": new_title}
 
 
 @router.get("/status/{id}", response=StatusOut, auth=api_key, tags=["status"])
