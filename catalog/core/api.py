@@ -1,9 +1,11 @@
-import json
+import os
+import shutil
 from django.shortcuts import get_object_or_404
 from typing import List
-from ninja import Router
+from ninja import Router, File
+from ninja.files import UploadedFile
 from ninja.security import django_auth, APIKeyQuery
-from .models import Client, Category, Collection, Size, Status, Color, Footwear
+from .models import Client, Category, Collection, Size, Status, Color, Footwear, Photo
 from .schemas import (
     ClientIn, ClientOut,
     CategoryIn, CategoryOut,
@@ -12,9 +14,10 @@ from .schemas import (
     StatusIn, StatusOut,
     ColorIn, ColorOut,
     FootwearIn, FootwearOut,
+    PhotoIn, PhotoOut,
 )
 
-from .utils import generate_api_key, modified_dict_values_title
+from .utils import generate_api_key, modified_dict_values_title, upload_image
 
 
 class ApiKey(APIKeyQuery):
@@ -538,3 +541,48 @@ def delete_footwear(request, id: int):
     code = footwear.code
     footwear.delete()
     return {"detail": f"Deleted footwear {code} with success"}
+
+
+@router.post("/footwear/fotos/", auth=api_key, tags=["footwear"])
+def upload_many_photos(request, code_footwear: str, files: List[UploadedFile] = File(...)):
+    code = code_footwear.upper()
+    client = Client.objects.get(key=request.auth.key)
+    try:
+        footwear = Footwear.objects.get(code=code)
+        print(code)
+        for f in files:
+            try:
+                print(f.file)
+                os.mkdir("photos")
+                print(os.getcwd())
+            except Exception as e:
+                print(e)
+
+            file_name = os.getcwd()+"/photos/"+f.name.replace(" ", "-")
+            with open(file_name, 'wb+') as buffer:
+                shutil.copyfileobj(f.file, buffer)
+
+            res = upload_image(file_name, code)
+            res_json = res.json()
+
+            if os.path.exists(file_name):
+                os.remove(file_name)
+            else:
+                print("The photo does not exist")
+
+            url_image = res_json['data']['url']
+            url_image_thumb = res_json['data']['thumb']['url']
+            mime_image = res_json['data']['image']['mime']
+            extension = res_json['data']['image']['extension']
+
+            photo = Photo.objects.create(client=client, code_footwear=footwear, title=code,
+                                         url=url_image, thumb=url_image_thumb,
+                                         mime=mime_image, extension=extension)
+        return ["Uploaded OK"]
+    except Footwear.DoesNotExist:
+        return {"detail": f"The {code} footwear not exists"}
+
+
+
+
+

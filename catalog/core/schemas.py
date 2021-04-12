@@ -100,3 +100,21 @@ class FootwearOut(Schema):
     size: SizeIn = None
     status: StatusIn = None
     color: ColorIn = None
+
+
+class PhotoIn(Schema):
+    photo: int
+    # title: int
+    # url: str
+    # thumb: str
+    # mime: str
+    # extension: str
+
+
+class PhotoOut(Schema):
+    code_footwear: FootwearIn = None
+    title: int
+    url: str
+    thumb: str
+    mime: str
+    extension: str
