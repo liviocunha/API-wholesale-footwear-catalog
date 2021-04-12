@@ -3,6 +3,7 @@ import base64
 import requests
 import sys
 from typing import Dict
+from decouple import config
 
 
 def generate_api_key():
@@ -21,8 +22,8 @@ def modified_dict_values_title(data_dict: Dict):
     return modified_dict
 
 
-# Replace with your API key
-api_key = 'e9ba762472ed0b259ca49bb9f9892a6a'
+# Replace with your API key - .env python decouple
+api_key = config('API_KEY_IMGBB')
 
 
 def upload_image(photo, code):
