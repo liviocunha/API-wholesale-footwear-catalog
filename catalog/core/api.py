@@ -55,8 +55,8 @@ def list_client(request):
     return qs
 
 
-# Category
-@router.post("/category/create", auth=api_key, tags=["category"])
+# Category/Categoria
+@router.post("/category/create", auth=api_key, tags=["categoria"], summary="Cadastrar nova categoria.")
 def create_category(request, payload: CategoryIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -72,7 +72,7 @@ def create_category(request, payload: CategoryIn):
         return {"id": category.id, "title": category.title}
 
 
-@router.put("/category/update/{id}", auth=api_key, tags=["category"])
+@router.put("/category/update/{id}", auth=api_key, tags=["categoria"], summary="Atualizar categoria.")
 def update_category(request, id: int, payload: CategoryIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -88,7 +88,8 @@ def update_category(request, id: int, payload: CategoryIn):
         return {"new_title": new_title}
 
 
-@router.get("/category/get/{id}", response=CategoryOut, auth=api_key, tags=["category"])
+@router.get("/category/get/{id}", response=CategoryOut, auth=api_key, tags=["categoria"],
+            summary="Buscar a categoria pelo ID.")
 def get_category(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -99,7 +100,8 @@ def get_category(request, id: int):
         return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
 
 
-@router.get("/category/search/{title}", response=List[CategoryOut], auth=api_key, tags=["category"])
+@router.get("/category/search/{title}", response=List[CategoryOut], auth=api_key, tags=["categoria"],
+            summary="Buscar a categoria pelo título.")
 def search_category(request, title: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -113,7 +115,8 @@ def search_category(request, title: str):
         return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
 
 
-@router.get("/category/list", response=List[CategoryOut], auth=api_key, tags=["category"])
+@router.get("/category/list", response=List[CategoryOut], auth=api_key, tags=["categoria"],
+            summary="Listar todas as categorias.")
 def list_category(request):
     client = Client.objects.get(key=request.auth.key)
     categories = Category.objects.filter(client=client)
@@ -123,7 +126,8 @@ def list_category(request):
         return [{"detail": "Categories empty"}]
 
 
-@router.delete("/category/delete/{id}", auth=api_key, tags=["category"])
+@router.delete("/category/delete/{id}", auth=api_key, tags=["categoria"],
+            summary="Apagar a categoria pelo ID.")
 def delete_category(request, id: int):
     category = get_object_or_404(Category, id=id)
     title = category.title
@@ -131,8 +135,8 @@ def delete_category(request, id: int):
     return {"detail": f"Deleted category {title} with success"}
 
 
-# Collection
-@router.post("/collection/create", auth=api_key, tags=["collection"])
+# Collection/Coleção
+@router.post("/collection/create", auth=api_key, tags=["coleção"], summary="Cadastrar nova coleção.")
 def create_collection(request, payload: CollectionIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -148,7 +152,7 @@ def create_collection(request, payload: CollectionIn):
         return {"id": collection.id, "title": collection.title}
 
 
-@router.put("/collection/update/{id}", auth=api_key, tags=["collection"])
+@router.put("/collection/update/{id}", auth=api_key, tags=["coleção"], summary="Atualizar coleção.")
 def update_collection(request, id: int, payload: CollectionIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -164,7 +168,8 @@ def update_collection(request, id: int, payload: CollectionIn):
         return {"new_title": new_title}
 
 
-@router.get("/collection/get/{id}", response=CollectionOut, auth=api_key, tags=["collection"])
+@router.get("/collection/get/{id}", response=CollectionOut, auth=api_key, tags=["coleção"],
+            summary="Buscar coleção pelo ID.")
 def get_collection(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -175,7 +180,8 @@ def get_collection(request, id: int):
         return {"id": None, "client": None, "title": None, "detail": "No collection for this Client"}
 
 
-@router.get("/collection/search/{title}", response=List[CollectionOut], auth=api_key, tags=["collection"])
+@router.get("/collection/search/{title}", response=List[CollectionOut], auth=api_key, tags=["coleção"],
+            summary="Buscar coleção pelo título.")
 def search_collection(request, title: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -189,7 +195,8 @@ def search_collection(request, title: str):
         return {"id": None, "client": None, "title": None, "detail": "No collection for this Client"}
 
 
-@router.get("/collection/list", response=List[CollectionOut], auth=api_key, tags=["collection"])
+@router.get("/collection/list", response=List[CollectionOut], auth=api_key, tags=["coleção"],
+            summary="Listar todas coleções.")
 def list_collection(request):
     client = Client.objects.get(key=request.auth.key)
     collections = Collection.objects.filter(client=client)
@@ -199,7 +206,8 @@ def list_collection(request):
         return [{"detail": "Collections empty"}]
 
 
-@router.delete("/collection/delete/{id}", auth=api_key, tags=["collection"])
+@router.delete("/collection/delete/{id}", auth=api_key, tags=["coleção"],
+            summary="Apagar a coleção pelo ID.")
 def delete_collection(request, id: int):
     collection = get_object_or_404(Collection, id=id)
     title = collection.title
@@ -207,8 +215,8 @@ def delete_collection(request, id: int):
     return {"detail": f"Deleted collection {title} with success"}
 
 
-# Size
-@router.post("/size/create", auth=api_key, tags=["size"])
+# Size/Tamanho/grade
+@router.post("/size/create", auth=api_key, tags=["tamanho/grade"], summary="Cadastrar novo tamanho/grade.")
 def create_size(request, payload: SizeIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -223,7 +231,7 @@ def create_size(request, payload: SizeIn):
         return {"id": size.id, "title": size.title}
 
 
-@router.put("/size/update/{id}", auth=api_key, tags=["size"])
+@router.put("/size/update/{id}", auth=api_key, tags=["tamanho/grade"], summary="Atualizar tamanho/grade.")
 def update_size(request, id: int, payload: SizeIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -239,7 +247,8 @@ def update_size(request, id: int, payload: SizeIn):
         return {"new_title": new_title}
 
 
-@router.get("/size/get/{id}", response=SizeOut, auth=api_key, tags=["size"])
+@router.get("/size/get/{id}", response=SizeOut, auth=api_key, tags=["tamanho/grade"],
+            summary="Buscar o tamanho/grade pelo ID.")
 def get_size(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -250,7 +259,8 @@ def get_size(request, id: int):
         return {"id": None, "client": None, "title": None, "detail": "No size for this Client"}
 
 
-@router.get("/size/search/{title}", response=List[SizeOut], auth=api_key, tags=["size"])
+@router.get("/size/search/{title}", response=List[SizeOut], auth=api_key, tags=["tamanho/grade"],
+            summary="Buscar o tamanho/grade pelo título.")
 def search_size(request, title: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -264,7 +274,8 @@ def search_size(request, title: str):
         return {"id": None, "client": None, "title": None, "detail": "No size for this Client"}
 
 
-@router.get("/size/list", response=List[SizeOut], auth=api_key, tags=["size"])
+@router.get("/size/list", response=List[SizeOut], auth=api_key, tags=["tamanho/grade"],
+            summary="Listar todos tamanhos/grades.")
 def list_size(request):
     client = Client.objects.get(key=request.auth.key)
     sizes = Size.objects.filter(client=client)
@@ -274,7 +285,8 @@ def list_size(request):
         return [{"detail": "Sizes empty"}]
 
 
-@router.delete("/size/delete/{id}", auth=api_key, tags=["size"])
+@router.delete("/size/delete/{id}", auth=api_key, tags=["tamanho/grade"],
+            summary="Apagar tamanho/grade pelo ID.")
 def delete_size(request, id: int):
     size = get_object_or_404(Size, id=id)
     title = size.title
@@ -283,7 +295,7 @@ def delete_size(request, id: int):
 
 
 # Status
-@router.post("/status/create", auth=api_key, tags=["status"])
+@router.post("/status/create", auth=api_key, tags=["status"], summary="Cadastrar novo status.")
 def create_status(request, payload: StatusIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -298,8 +310,8 @@ def create_status(request, payload: StatusIn):
         return {"id": status.id, "title": status.title}
 
 
-@router.put("/status/update/{id}", auth=api_key, tags=["status"])
-def update_size(request, id: int, payload: StatusIn):
+@router.put("/status/update/{id}", auth=api_key, tags=["status"], summary="Atualizar status.")
+def update_status(request, id: int, payload: StatusIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
     try:
@@ -314,7 +326,8 @@ def update_size(request, id: int, payload: StatusIn):
         return {"new_title": new_title}
 
 
-@router.get("/status/get/{id}", response=StatusOut, auth=api_key, tags=["status"])
+@router.get("/status/get/{id}", response=StatusOut, auth=api_key, tags=["status"],
+            summary="Buscar status pelo ID.")
 def get_status(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -325,7 +338,8 @@ def get_status(request, id: int):
         return {"id": None, "client": None, "title": None, "detail": "No status for this Client"}
 
 
-@router.get("/status/search/{title}", response=List[StatusOut], auth=api_key, tags=["status"])
+@router.get("/status/search/{title}", response=List[StatusOut], auth=api_key, tags=["status"],
+            summary="Buscar status pelo título.")
 def search_status(request, title: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -339,7 +353,8 @@ def search_status(request, title: str):
         return {"id": None, "client": None, "title": None, "detail": "No status for this Client"}
 
 
-@router.get("/status/list", response=List[StatusOut], auth=api_key, tags=["status"])
+@router.get("/status/list", response=List[StatusOut], auth=api_key, tags=["status"],
+            summary="Listar todos os status.")
 def list_status(request):
     client = Client.objects.get(key=request.auth.key)
     statuses = Status.objects.filter(client=client)
@@ -349,7 +364,8 @@ def list_status(request):
         return [{"detail": "statuses empty"}]
 
 
-@router.delete("/status/delete/{id}", auth=api_key, tags=["status"])
+@router.delete("/status/delete/{id}", auth=api_key, tags=["status"],
+               summary="Apagar o status por ID.")
 def delete_status(request, id: int):
     status = get_object_or_404(Status, id=id)
     title = status.title
@@ -357,8 +373,8 @@ def delete_status(request, id: int):
     return {"detail": f"Deleted status {title} with success"}
 
 
-# Color
-@router.post("/color/create", auth=api_key, tags=["color"])
+# Color/Cor
+@router.post("/color/create", auth=api_key, tags=["cor"], summary="Cadastrar nova cor.")
 def create_color(request, payload: ColorIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -373,7 +389,7 @@ def create_color(request, payload: ColorIn):
         return {"id": color.id, "title": color.name}
 
 
-@router.put("/color/update/{id}", auth=api_key, tags=["color"])
+@router.put("/color/update/{id}", auth=api_key, tags=["cor"], summary="Atualizar cor.")
 def update_color(request, id: int, payload: ColorIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -389,7 +405,7 @@ def update_color(request, id: int, payload: ColorIn):
         return {"new_name": new_name}
 
 
-@router.get("/color/get/{id}", response=ColorOut, auth=api_key, tags=["color"])
+@router.get("/color/get/{id}", response=ColorOut, auth=api_key, tags=["cor"], summary="Buscar cor pelo ID.")
 def get_color(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -400,7 +416,8 @@ def get_color(request, id: int):
         return {"id": None, "client": None, "name": None, "detail": "No color for this Client"}
 
 
-@router.get("/color/search/{name}", response=List[ColorOut], auth=api_key, tags=["color"])
+@router.get("/color/search/{name}", response=List[ColorOut], auth=api_key, tags=["cor"],
+            summary="Buscar cor pelo nome.")
 def search_color(request, name: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -414,7 +431,8 @@ def search_color(request, name: str):
         return {"id": None, "client": None, "name": None, "detail": "No color for this Client"}
 
 
-@router.get("/color/list", response=List[ColorOut], auth=api_key, tags=["color"])
+@router.get("/color/list", response=List[ColorOut], auth=api_key, tags=["cor"],
+            summary="Listar todas as cores.")
 def list_color(request):
     client = Client.objects.get(key=request.auth.key)
     colors = Color.objects.filter(client=client)
@@ -424,7 +442,8 @@ def list_color(request):
         return [{"detail": "colors empty"}]
 
 
-@router.delete("/color/delete/{id}", auth=api_key, tags=["color"])
+@router.delete("/color/delete/{id}", auth=api_key, tags=["cor"],
+               summary="Apagar a cor pelo ID.")
 def delete_color(request, id: int):
     color = get_object_or_404(Color, id=id)
     name = color.name
@@ -432,8 +451,8 @@ def delete_color(request, id: int):
     return {"detail": f"Deleted color {name} with success"}
 
 
-# Footwear
-@router.post("/footwear/create", auth=api_key, tags=["footwear"])
+# Footwear/Calçados
+@router.post("/footwear/create", auth=api_key, tags=["calçados"], summary="Cadastrar novo calçado.")
 def create_footwear(request, payload: FootwearIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -459,7 +478,7 @@ def create_footwear(request, payload: FootwearIn):
         return {"id": footwear.id, "code": footwear.code, "name": footwear.name}
 
 
-@router.put("/footwear/update/{id}", auth=api_key, tags=["footwear"])
+@router.put("/footwear/update/{id}", auth=api_key, tags=["calçados"], summary="Atualizar calçado.")
 def update_footwear(request, id: int, payload: FootwearIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -488,7 +507,8 @@ def update_footwear(request, id: int, payload: FootwearIn):
     return {"detail": f"OK, footwear code {code} update!"}
 
 
-@router.get("/footwear/get/{id}", response=FootwearOut, auth=api_key, tags=["footwear"])
+@router.get("/footwear/get/{id}", response=FootwearOut, auth=api_key, tags=["calçados"], summary="Buscar o calçado "
+                                                                                                 "pelo ID.")
 def get_footwear(request, id: int):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -503,7 +523,8 @@ def get_footwear(request, id: int):
                 "detail": "No footwear for this Client"}
 
 
-@router.get("/footwear/search/{name}", response=List[FootwearOut], auth=api_key, tags=["footwear"])
+@router.get("/footwear/search/{name}", response=List[FootwearOut], auth=api_key, tags=["calçados"],
+            summary="Buscar calçados pelo nome.")
 def search_footwear(request, name: str):
     try:
         client = Client.objects.get(key=request.auth.key)
@@ -525,7 +546,8 @@ def search_footwear(request, name: str):
                 "detail": "No footwear for this Client"}
 
 
-@router.get("/footwear/list", response=List[FootwearOut], auth=api_key, tags=["footwear"])
+@router.get("/footwear/list", response=List[FootwearOut], auth=api_key, tags=["calçados"],
+            summary="Listar todos calçados.")
 def list_footwear(request):
     client = Client.objects.get(key=request.auth.key)
     footwears = Footwear.objects.filter(client=client)
@@ -535,7 +557,8 @@ def list_footwear(request):
         return [{"detail": "footwears empty"}]
 
 
-@router.delete("/footwear/delete/{id}", auth=api_key, tags=["footwear"])
+@router.delete("/footwear/delete/{id}", auth=api_key, tags=["calçados"],
+            summary="Apagar o calçado pelo ID.")
 def delete_footwear(request, id: int):
     footwear = get_object_or_404(Footwear, id=id)
     code = footwear.code
@@ -543,7 +566,8 @@ def delete_footwear(request, id: int):
     return {"detail": f"Deleted footwear {code} with success"}
 
 
-@router.post("/footwear/fotos/", auth=api_key, tags=["footwear"])
+@router.post("/footwear/photos", auth=api_key, tags=["calçados"],
+            summary="Subir fotos pelo código referência do calçado.")
 def upload_many_photos(request, code_footwear: str, files: List[UploadedFile] = File(...)):
     code = code_footwear.upper()
     client = Client.objects.get(key=request.auth.key)

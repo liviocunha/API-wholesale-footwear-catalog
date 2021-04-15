@@ -7,8 +7,8 @@ api = NinjaAPI(
     version='1.0',
     csrf=True,
     title='API Wholesale Footwear Catalog',
-    description='This project contains backend REST APIs needed to support a web application that allows '
-                'a footwear industry to display wholesale catalog.',
+    description='Este projeto é uma API RESTful que contém endpoints necessários para dar suporte a um '
+                'aplicativo da web que permite que uma indústria de calçados exiba um catálogo de atacado.',
     urls_namespace='public_api',
 )
 api.add_router('/catalog/', catalog_router)
