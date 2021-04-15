@@ -51,14 +51,19 @@ class Color(models.Model):
 
 
 class Footwear(models.Model):
+    GENDER_CHOICES = (
+        ("M", "MASCULINO"),
+        ("F", "FEMININO"),
+        ("U", "UNISSEX")
+    )
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
     code = models.CharField(max_length=100, help_text="Code of footwear.", verbose_name="Code")
     upper = models.CharField(max_length=100, help_text="Upper/Leather material of footwear.", verbose_name="Upper")
     name = models.CharField(max_length=100, help_text="Title of footwear", verbose_name="Title")
     outsole = models.CharField(max_length=100, help_text="Outsole material of footwear.", verbose_name="Outsole")
     lining = models.CharField(max_length=100, help_text="Lining material of footwear.", verbose_name="Lining")
-    shoelaces = models.CharField(max_length=100, help_text="Shoelaces material of footwear.", verbose_name="Shoelaces")
-    insole = models.CharField(max_length=100, help_text="Insole material of footwear.", verbose_name="Insole")
+    closure = models.CharField(max_length=100, help_text="Footwear closure types.", verbose_name="Closure")
     abc_curve = models.CharField(max_length=1, help_text="ABC curve of footwear.", verbose_name="Curve")
     cost_price = models.FloatField(null=True, blank=True, verbose_name="USD $")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
@@ -66,6 +71,7 @@ class Footwear(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, blank=True, null=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=False, null=False)
 
     def __str__(self):
         return self.code

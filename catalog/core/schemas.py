@@ -72,7 +72,7 @@ class FootwearIn(Schema):
     name: str
     outsole: str
     lining: str
-    shoelaces: str
+    closure: str
     insole: str
     abc_curve: str
     cost_price: float
@@ -91,7 +91,7 @@ class FootwearOut(Schema):
     name: str
     outsole: str
     lining: str
-    shoelaces: str
+    closure: str
     insole: str
     abc_curve: str
     cost_price: float
