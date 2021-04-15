@@ -64,6 +64,7 @@ class Footwear(models.Model):
     outsole = models.CharField(max_length=100, help_text="Outsole material of footwear.", verbose_name="Outsole")
     lining = models.CharField(max_length=100, help_text="Lining material of footwear.", verbose_name="Lining")
     closure = models.CharField(max_length=100, help_text="Footwear closure types.", verbose_name="Closure")
+    insole = models.CharField(max_length=100, help_text="Insole material of footwear.", verbose_name="Insole")
     abc_curve = models.CharField(max_length=1, help_text="ABC curve of footwear.", verbose_name="Curve")
     cost_price = models.FloatField(null=True, blank=True, verbose_name="USD $")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
