@@ -1,0 +1,138 @@
+[
+  {
+    "model": "core.category",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "title": "Chinelo"
+    }
+  },
+  {
+    "model": "core.category",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "title": "Tênis"
+    }
+  },
+  {
+    "model": "core.category",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "title": "Sandália"
+    }
+  },
+  {
+    "model": "core.category",
+    "pk": 4,
+    "fields": {
+      "client": 1,
+      "title": "Bota"
+    }
+  },
+    {
+    "model": "core.collection",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "title": "Inverno 2020"
+    }
+  },
+  {
+    "model": "core.collection",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "title": "Verão 2021"
+    }
+  },
+    {
+    "model": "core.color",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "name": "Amarelo/Marrom"
+    }
+  },
+  {
+    "model": "core.color",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "name": "Rosa"
+    }
+  },
+  {
+    "model": "core.color",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "name": "Marrom"
+    }
+  },
+  {
+    "model": "core.color",
+    "pk": 4,
+    "fields": {
+      "client": 1,
+      "name": "Rosa/Azul"
+    }
+  },
+    {
+    "model": "core.size",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "title": "33 ao 39"
+    }
+  },
+  {
+    "model": "core.size",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "title": "37 ao 44"
+    }
+  },
+  {
+    "model": "core.size",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "title": "34 ao 40"
+    }
+  },
+  {
+    "model": "core.size",
+    "pk": 4,
+    "fields": {
+      "client": 1,
+      "title": "37 ao 48"
+    }
+  },
+    {
+    "model": "core.status",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "title": "Em estoque"
+    }
+  },
+  {
+    "model": "core.status",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "title": "Não disponível"
+    }
+  },
+  {
+    "model": "core.status",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "title": "Esgotado"
+    }
+  }
+]

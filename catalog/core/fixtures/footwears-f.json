@@ -1,0 +1,194 @@
+[
+    {
+    "model": "core.footwear",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "code": "100CHAM",
+      "upper": "Borracha",
+      "name": "Chinelo Marca Amarelo/Marrom Feminino",
+      "outsole": "Borracha",
+      "lining": "Borracha",
+      "closure": "Sem fechamento",
+      "insole": "Borracha",
+      "abc_curve": "A",
+      "cost_price": 30,
+      "category": 1,
+      "collection": 2,
+      "size": 1,
+      "status": 1,
+      "color": 1,
+      "gender": "F"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 1,
+    "fields": {
+      "client": 1,
+      "code_footwear": 1,
+      "title": "100CHAM",
+      "url": "https://i.ibb.co/JqXLxN2/chinelo-amarelo-marrom-2.png",
+      "thumb": "https://i.ibb.co/MfqT8bp/chinelo-amarelo-marrom-2.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "code_footwear": 1,
+      "title": "100CHAM",
+      "url": "https://i.ibb.co/JcJz3wP/chinelo-amarelo-marrom-1.png",
+      "thumb": "https://i.ibb.co/p1F3hBp/chinelo-amarelo-marrom-1.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.footwear",
+    "pk": 2,
+    "fields": {
+      "client": 1,
+      "code": "200BTRO",
+      "upper": "Couro",
+      "name": "Bota Marca Rosa Feminino",
+      "outsole": "Borracha",
+      "lining": "Couro",
+      "closure": "Zíper",
+      "insole": "Espuma",
+      "abc_curve": "A",
+      "cost_price": 70,
+      "category": 4,
+      "collection": 1,
+      "size": 3,
+      "status": 3,
+      "color": 2,
+      "gender": "F"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "code_footwear": 2,
+      "title": "200BTRO",
+      "url": "https://i.ibb.co/nRB9QGM/bota-rosa-2.png",
+      "thumb": "https://i.ibb.co/PtMK1LG/bota-rosa-2.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 4,
+    "fields": {
+      "client": 1,
+      "code_footwear": 2,
+      "title": "200BTRO",
+      "url": "https://i.ibb.co/y41J4KC/bota-rosa-1.png",
+      "thumb": "https://i.ibb.co/Y0MG0JS/bota-rosa-1.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.footwear",
+    "pk": 3,
+    "fields": {
+      "client": 1,
+      "code": "300SDMA",
+      "upper": "Couro",
+      "name": "Sandalia Gladiadora Marca Marrom Feminino",
+      "outsole": "Borracha",
+      "lining": "Couro",
+      "closure": "Velcro",
+      "insole": "Couro",
+      "abc_curve": "C",
+      "cost_price": 50,
+      "category": 3,
+      "collection": 2,
+      "size": 3,
+      "status": 2,
+      "color": 3,
+      "gender": "F"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 5,
+    "fields": {
+      "client": 1,
+      "code_footwear": 3,
+      "title": "300SDMA",
+      "url": "https://i.ibb.co/HnHRdvD/sandalia-gladiador-marrom-2.png",
+      "thumb": "https://i.ibb.co/Pw6JQpZ/sandalia-gladiador-marrom-2.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 6,
+    "fields": {
+      "client": 1,
+      "code_footwear": 3,
+      "title": "300SDMA",
+      "url": "https://i.ibb.co/sjrJ0sH/sandalia-gladiador-marrom-1.png",
+      "thumb": "https://i.ibb.co/hsv1P2f/sandalia-gladiador-marrom-1.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.footwear",
+    "pk": 4,
+    "fields": {
+      "client": 1,
+      "code": "400TERA",
+      "upper": "Têxtil",
+      "name": "Tenis Caminhada Marca Rosa/Azul Feminino",
+      "outsole": "E.V.A",
+      "lining": "Têxtil",
+      "closure": "Cadarço",
+      "insole": "Espuma",
+      "abc_curve": "B",
+      "cost_price": 90,
+      "category": 3,
+      "collection": 2,
+      "size": 3,
+      "status": 2,
+      "color": 3,
+      "gender": "F"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 7,
+    "fields": {
+      "client": 1,
+      "code_footwear": 4,
+      "title": "400TERA",
+      "url": "https://i.ibb.co/5BJ631B/tenis-rosa-azul-2.png",
+      "thumb": "https://i.ibb.co/YpV3SNp/tenis-rosa-azul-2.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "model": "core.photo",
+    "pk": 8,
+    "fields": {
+      "client": 1,
+      "code_footwear": 4,
+      "title": "400TERA",
+      "url": "https://i.ibb.co/T0pWkzB/tenis-rosa-azul-1.png",
+      "thumb": "https://i.ibb.co/vdgXH2x/tenis-rosa-azul-1.png",
+      "mime": "image/png",
+      "extension": "png"
+    }
+  }
+]
