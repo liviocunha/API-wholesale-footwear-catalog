@@ -573,10 +573,10 @@ def upload_many_photos(request, code_footwear: str, files: List[UploadedFile] = 
     client = Client.objects.get(key=request.auth.key)
     try:
         footwear = Footwear.objects.get(code=code)
-        print(code)
+        photos = []
+        i = 1
         for f in files:
             try:
-                print(f.file)
                 os.mkdir("photos")
                 print(os.getcwd())
             except Exception as e:
@@ -586,7 +586,8 @@ def upload_many_photos(request, code_footwear: str, files: List[UploadedFile] = 
             with open(file_name, 'wb+') as buffer:
                 shutil.copyfileobj(f.file, buffer)
 
-            res = upload_image(file_name, code)
+            name_photo = f"{code}-{i}"
+            res = upload_image(file_name, name_photo)
             res_json = res.json()
 
             if os.path.exists(file_name):
@@ -595,16 +596,20 @@ def upload_many_photos(request, code_footwear: str, files: List[UploadedFile] = 
                 print("The photo does not exist")
 
             url_image = res_json['data']['url']
-            url_image_thumb = res_json['data']['thumb']['url']
+            url_thumb = res_json['data']['thumb']['url']
             mime_image = res_json['data']['image']['mime']
             extension = res_json['data']['image']['extension']
 
             photo = Photo.objects.create(client=client, code_footwear=footwear, title=code,
-                                         url=url_image, thumb=url_image_thumb,
+                                         url=url_image, thumb=url_thumb,
                                          mime=mime_image, extension=extension)
-        return ["Uploaded OK"]
+            i += 1
+            photos.append({"url_image": url_image, "url_thumb": url_thumb,
+                           "MIME type": mime_image, "extension": extension})
+        return [p for p in photos]
     except Footwear.DoesNotExist:
         return {"detail": f"The {code} footwear not exists"}
+
 
 
 
