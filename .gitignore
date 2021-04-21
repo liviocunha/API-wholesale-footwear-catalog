@@ -131,3 +131,6 @@ dmypy.json
 
 # dir_project
 /photos
+
+# Idle
+.vscode/
