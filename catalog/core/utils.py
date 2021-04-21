@@ -37,19 +37,15 @@ def upload_image(photo, code):
             }
             res = requests.post(url, payload)
         if res.status_code == 200:
-            # print("Server Response: " + str(res.status_code))
-            # print("Image Successfully Uploaded")
             return res
         else:
-            print("ERROR")
-            print("Server Response: " + str(res.status_code))
+            print("ERROR | Server Response: " + str(res.status_code))
             return res
-    except FileNotFoundError as e:
+    except FileNotFoundError as e:        
+        raise
         print("FileNotFoundError:", e)
-        sys.exit()
     except OSError as e:
         print("OSError:", e)
-        sys.exit()
     except Exception as e:
         print(type(e), e)
         sys.exit()
