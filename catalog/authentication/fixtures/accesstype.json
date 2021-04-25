@@ -1,0 +1,23 @@
+[
+    {
+      "model": "authentication.AccessTypeModel",
+      "pk": 1,
+      "fields": {
+        "type": "Administrador"
+      }
+    },
+    {
+        "model": "authentication.AccessTypeModel",
+        "pk": 2,
+        "fields": {
+          "type": "Industria"
+        }
+    },
+    {
+        "model": "authentication.AccessTypeModel",
+        "pk": 3,
+        "fields": {
+          "type": "Revendedor"
+        }
+    }
+  ]

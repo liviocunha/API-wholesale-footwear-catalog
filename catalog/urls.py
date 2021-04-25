@@ -2,6 +2,8 @@ from django.urls import path
 from django.contrib import admin
 from ninja import NinjaAPI
 from catalog.core.api import router as catalog_router
+from catalog.authentication.api import router as auth_router
+
 
 api = NinjaAPI(
     version='1.0',
@@ -11,7 +13,9 @@ api = NinjaAPI(
                 'aplicativo da web que permite que uma indústria de calçados exiba um catálogo de atacado.',
     urls_namespace='public_api',
 )
+
 api.add_router('/catalog/', catalog_router)
+api.add_router('/authentication/', auth_router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
