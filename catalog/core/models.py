@@ -1,4 +1,5 @@
 from django.db import models
+from catalog.authentication.models import CustomUser
 
 
 class Client(models.Model):
@@ -11,7 +12,7 @@ class Client(models.Model):
 
 
 class Category(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, blank=False, null=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
     title = models.CharField(max_length=100, help_text="Category of footwear.", verbose_name="Category")
 
     def __str__(self):

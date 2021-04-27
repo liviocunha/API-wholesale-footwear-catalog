@@ -18,6 +18,8 @@ from .schemas import (
 )
 
 from .utils import generate_api_key, modified_dict_values_title, upload_image
+from catalog.authentication.api import TokenAuth
+from catalog.authentication.models import CustomUser
 
 
 class ApiKey(APIKeyQuery):
@@ -56,28 +58,31 @@ def list_client(request):
 
 
 # Category/Categoria
-@router.post("/category/create", auth=api_key, tags=["categoria"], summary="Cadastrar nova categoria.")
+@router.post("/category/create", auth=TokenAuth(), tags=["categoria"], summary="Cadastrar nova categoria.")
 def create_category(request, payload: CategoryIn):
     data = payload.dict()
-    data = modified_dict_values_title(data)
-    client = Client.objects.get(key=request.auth.key)
-    try:
-        categories = Category.objects.filter(client=client)
-        get_category = categories.get(title__icontains=data['title'])
+    # data = modified_dict_values_title(data)
+    # client = Client.objects.get(key=request.auth.key)
+    user_logged = CustomUser.objects.get(id=int(request.auth['sub']))
+    if user_logged.access_type.id == 2:
+        try:
+            categories = Category.objects.filter(user=user_logged)
+            get_category = categories.get(title__icontains=data['title'])
 
-        return {"detail": f"The {data['title']} category already exists, please insert a new one."}
-    except Category.DoesNotExist:
-        category = Category.objects.create(client=client, title=data['title'])
+            return {"detail": f"The {data['title']} category already exists, please insert a new one."}
+        except Category.DoesNotExist:
+            category = Category.objects.create(user=user_logged, title=data['title'])
 
-        return {"id": category.id, "title": category.title}
+            return {"id": category.id, "title": category.title}
 
 
-@router.put("/category/update/{id}", auth=api_key, tags=["categoria"], summary="Atualizar categoria.")
+@router.put("/category/update/{id}", auth=TokenAuth(), tags=["categoria"], summary="Atualizar categoria.")
 def update_category(request, id: int, payload: CategoryIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
+    user_logged = CustomUser.objects.get(id=int(request.auth['sub']))
     try:
-        get_category = Category.objects.get(title__icontains=data['title'])
+        get_category = Category.objects.get(title__icontains=data['title'], user=user_logged)
         return {"detail": f"The {data['title']} category already exists, please insert a new one."}
     except Category.DoesNotExist:
         category = get_object_or_404(Category, id=id)
@@ -88,55 +93,55 @@ def update_category(request, id: int, payload: CategoryIn):
         return {"new_title": new_title}
 
 
-@router.get("/category/get/{id}", response=CategoryOut, auth=api_key, tags=["categoria"],
+@router.get("/category/get/{id}", response=CategoryOut, auth=TokenAuth(), tags=["categoria"],
             summary="Buscar a categoria pelo ID.")
 def get_category(request, id: int):
     try:
-        client = Client.objects.get(key=request.auth.key)
-        categories = Category.objects.filter(client=client)
+        user_logged = CustomUser.objects.get(id=int(request.auth['sub']))
+        categories = Category.objects.filter(user=user_logged)
         category_one = categories.get(id=id)
         return category_one
     except Category.DoesNotExist:
-        return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
+        return {"id": None, "user": None, "title": None, "detail": "No category for this Client"}
 
 
-@router.get("/category/search/{title}", response=List[CategoryOut], auth=api_key, tags=["categoria"],
+@router.get("/category/search/{title}", response=List[CategoryOut], auth=TokenAuth(), tags=["categoria"],
             summary="Buscar a categoria pelo título.")
 def search_category(request, title: str):
     try:
-        client = Client.objects.get(key=request.auth.key)
-        categories = Category.objects.filter(client=client)
+        user_logged = CustomUser.objects.get(id=int(request.auth['sub']))
+        categories = Category.objects.filter(user=user_logged)
         categories_search = categories.filter(title__icontains=title)
         if len(categories_search) > 0:
             return categories_search
         else:
-            return [{"id": None, "client": None, "title": None, "detail": "No category for this search"}]
+            return [{"id": None, "user": None, "title": None, "detail": "No category for this search"}]
     except Category.DoesNotExist:
-        return {"id": None, "client": None, "title": None, "detail": "No category for this Client"}
+        return {"id": None, "user": None, "title": None, "detail": "No category for this User"}
 
 
-@router.get("/category/list", response=List[CategoryOut], auth=api_key, tags=["categoria"],
+@router.get("/category/list", response=List[CategoryOut], auth=TokenAuth(), tags=["categoria"],
             summary="Listar todas as categorias.")
 def list_category(request):
-    client = Client.objects.get(key=request.auth.key)
-    categories = Category.objects.filter(client=client)
+    user_logged = CustomUser.objects.get(id=int(request.auth['sub']))
+    categories = Category.objects.filter(user=user_logged)
     if len(categories) > 0:
         return categories
     else:
         return [{"detail": "Categories empty"}]
 
 
-@router.delete("/category/delete/{id}", auth=api_key, tags=["categoria"],
+@router.delete("/category/delete/{id}", auth=TokenAuth(), tags=["categoria"],
             summary="Apagar a categoria pelo ID.")
 def delete_category(request, id: int):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, user=user_logged)
     title = category.title
     category.delete()
     return {"detail": f"Deleted category {title} with success"}
 
 
 # Collection/Coleção
-@router.post("/collection/create", auth=api_key, tags=["coleção"], summary="Cadastrar nova coleção.")
+@router.post("/collection/create", auth=TokenAuth(), tags=["coleção"], summary="Cadastrar nova coleção.")
 def create_collection(request, payload: CollectionIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -152,7 +157,7 @@ def create_collection(request, payload: CollectionIn):
         return {"id": collection.id, "title": collection.title}
 
 
-@router.put("/collection/update/{id}", auth=api_key, tags=["coleção"], summary="Atualizar coleção.")
+@router.put("/collection/update/{id}", auth=TokenAuth(), tags=["coleção"], summary="Atualizar coleção.")
 def update_collection(request, id: int, payload: CollectionIn):
     data = payload.dict()
     data = modified_dict_values_title(data)
@@ -168,7 +173,7 @@ def update_collection(request, id: int, payload: CollectionIn):
         return {"new_title": new_title}
 
 
-@router.get("/collection/get/{id}", response=CollectionOut, auth=api_key, tags=["coleção"],
+@router.get("/collection/get/{id}", response=CollectionOut, auth=TokenAuth(), tags=["coleção"],
             summary="Buscar coleção pelo ID.")
 def get_collection(request, id: int):
     try:

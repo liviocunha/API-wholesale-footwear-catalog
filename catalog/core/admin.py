@@ -3,7 +3,7 @@ from .models import Category, Collection, Size, Status, Footwear, Photo, Client,
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'client')
+    list_display = ('title', 'user')
     search_fields = ('title',)
 
 
