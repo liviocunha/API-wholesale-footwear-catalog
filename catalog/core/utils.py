@@ -23,7 +23,7 @@ def modified_dict_values_title(data_dict: Dict):
 
 
 # Replace with your API key - .env python decouple
-api_key = config('API_KEY_IMGBB')
+# api_key = config('API_KEY_IMGBB')
 
 
 def upload_image(photo, code):

@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 
+
 class AccessTypeModel(models.Model):
     type = models.CharField(max_length=50)
 
@@ -12,6 +13,7 @@ class AccessTypeModel(models.Model):
     
     def __str__(self):
         return f'{self.type}'
+
 
 class CustomUserManager(BaseUserManager):
     """
@@ -44,6 +46,7 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
+
 
 class CustomUser(AbstractUser):
     username = None
